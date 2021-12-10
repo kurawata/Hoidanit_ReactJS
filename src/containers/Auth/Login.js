@@ -5,7 +5,8 @@ import { push } from "connected-react-router";
 import * as actions from "../../store/actions";
 import './Login.scss';
 import { FormattedMessage } from 'react-intl';
-
+import { handleUserLoginAPI } from '../../services/userService';
+import { userLoginSuccess } from '../../store/actions';
 
 
 class Login extends Component {
@@ -14,8 +15,8 @@ class Login extends Component {
         this.state = {
             username: '',
             password: '',
-            isShowPassword: false
-
+            isShowPassword: false,
+            errMessage: ''
         }
     }
     ////////////Function/////////////////
@@ -23,20 +24,46 @@ class Login extends Component {
         this.setState({
             username: event.target.value
         })
-        console.log(event.target.value);
+        //console.log(event.target.value);
     }
 
     handleOnChangePassword = (event) => {
         this.setState({
             password: event.target.value
         })
-        console.log(event.target.value);
+        //console.log(event.target.value);
     }
-    handleLogin = () => {
-        // alert('Clicked !')
-        console.log("username: ", this.state.username, " password: ", this.state.password);
-        console.log("allstate: ", this.state);
-
+    handleLogin = async () => {
+        this.setState({
+            errMessage: ''
+        })
+        try {
+            // alert('Clicked !')
+            // console.log("username: ", this.state.username, " password: ", this.state.password);
+            // console.log("allstate: ", this.state);
+            let data = await handleUserLoginAPI(this.state.username, this.state.password);
+            if (data && data.errCode !== 0) {
+                this.setState({
+                    errMessage: data.message
+                })
+            }
+            if (data && data.errCode == 0) {
+                this.props.userLoginSuccess(data.user);
+                //console.log('login success');
+            }
+        } catch (e) {
+            if (e.response) {
+                if (e.response.data) {
+                    this.setState({
+                        errMessage: e.response.data.message
+                    })
+                }
+            }
+            //console.log('hoidanit', e.response);
+            // this.state.setState({
+            //     errMessage: e.Response
+            // })
+        }
     }
     handleShowHidePassword = () => {
         this.setState({
@@ -71,8 +98,10 @@ class Login extends Component {
                                 >
                                     <i className={this.state.isShowPassword ? 'far fa-eye' : 'far fa-eye-slash'}></i>
                                 </span>
-
                             </div>
+                        </div>
+                        <div className="col-12" style={{ color: 'red' }}>
+                            {this.state.errMessage}
                         </div>
                         <div className="col-12">
                             <button className="btn-login"
@@ -110,6 +139,7 @@ const mapDispatchToProps = dispatch => {
         navigate: (path) => dispatch(push(path)),
         adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
         adminLoginFail: () => dispatch(actions.adminLoginFail()),
+        userLoginSuccess: (userInfo) => dispatch(actions.userLoginSuccess(userInfo)),
     };
 };
 
