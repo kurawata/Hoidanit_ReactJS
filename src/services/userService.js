@@ -9,5 +9,10 @@ const handleUserLoginAPI = (userEmail, userPpassword) => {
     });
 }
 
-export { handleUserLoginAPI };
+const getAllUser = (inputId) => {
+    //template string
+    return axios.get(`/api/get-all-user?id=${inputId}`);
+}
+
+export { handleUserLoginAPI, getAllUser };
 
