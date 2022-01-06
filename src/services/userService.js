@@ -19,9 +19,9 @@ const createNewUserService = (data) => {
     return axios.post('/api/create-new-user', data);
 }
 
-const deleteUserSevice = (id) => {
-    console.log(id);
-    return axios.delete(`/api/delete-user?id=${id}`);
+const deleteUserSevice = (userId) => {
+    console.log(userId);
+    return axios.delete('/api/delete-user', { data: { id: userId } });
 }
 
 export { handleUserLoginAPI, getAllUser, createNewUserService, deleteUserSevice };
