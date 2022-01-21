@@ -109,7 +109,7 @@ class UserManage extends Component {
                 alert(res.errCode)
             }
         } catch (e) {
-
+            console.log(e);
         }
 
     }
