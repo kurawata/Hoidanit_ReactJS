@@ -12,7 +12,6 @@ class Home extends Component {
             <Redirect to={linkToRedirect} />
         );
     }
-
 }
 
 const mapStateToProps = state => {
