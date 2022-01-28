@@ -20,7 +20,8 @@
         "child5": "Mental health",
         "child6": "Dental examination",
         "child7": "Surgery pack",
-        "child8": "Medical products"
+        "child8": "Medical products",
+        "search-box": "Find a medical specialty"
     },
     "common": {
         "add": "Add",
